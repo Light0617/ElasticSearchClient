@@ -17,7 +17,7 @@ import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 
-public class exampleTest {
+public class IndexTest extends TestBase {
     TransportClient client;
     @Before
     public void setUp() throws Exception {
@@ -32,7 +32,7 @@ public class exampleTest {
     public void simpleTest() throws IOException {
 
         XContentBuilder builderObject = getExampleObject();
-        IndexResponse response = client.prepareIndex("people", "Doe")
+        IndexResponse response = client.prepareIndex("member", "Doe")
                 .setSource(builderObject).get();
 
         String id = response.getId();
@@ -41,8 +41,8 @@ public class exampleTest {
         long version = response.getVersion();
 
         assertEquals(Result.CREATED, response.getResult());
-        assertEquals(0, version);
-        assertEquals("people", index);
+        assertEquals(1, version);
+        assertEquals("member", index);
         assertEquals("Doe", type);
     }
 
@@ -51,13 +51,4 @@ public class exampleTest {
         client.close();
     }
 
-    private XContentBuilder getExampleObject() throws IOException {
-        XContentBuilder builderObject = XContentFactory.jsonBuilder()
-                .startObject()
-                .field("fullName", "Test")
-                .field("dateOfBirth", new Date())
-                .field("age", "10")
-                .endObject();
-        return builderObject;
-    }
 }
